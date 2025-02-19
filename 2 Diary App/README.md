@@ -1,4 +1,4 @@
-# 🌤️ Diary App
+# 📔 Diary App
 
 Welcome to my Diary app where you can write notes and find them on the calendar by their creation date.
 
