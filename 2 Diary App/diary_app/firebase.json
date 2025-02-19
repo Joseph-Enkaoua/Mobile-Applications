@@ -1,0 +1,50 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "diary-app-9f1d5",
+          "appId": "1:850021421455:android:867579157ae73c340dfbfa",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "diary-app-9f1d5",
+          "appId": "1:850021421455:ios:344dc5d6a938d3640dfbfa",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "diary-app-9f1d5",
+          "appId": "1:850021421455:ios:344dc5d6a938d3640dfbfa",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "diary-app-9f1d5",
+          "configurations": {
+            "android": "1:850021421455:android:867579157ae73c340dfbfa",
+            "ios": "1:850021421455:ios:344dc5d6a938d3640dfbfa",
+            "macos": "1:850021421455:ios:344dc5d6a938d3640dfbfa",
+            "web": "1:850021421455:web:81e84adf5c9fab810dfbfa",
+            "windows": "1:850021421455:web:c538125ff2ed57c30dfbfa"
+          }
+        }
+      }
+    }
+  },
+  "emulators": {
+    "database": {
+      "port": 9000
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  }
+}
