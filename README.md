@@ -13,7 +13,7 @@ An app to fetch weather anywhere. For current, daily and weekly forecast. Using 
 ---
 
 ### 2️⃣ Project Two - Diary App
-An app to write notes and find them on a calendar by the creation date. Using Firebase for AUthentication with Google / Github, and Realtime database.
+An app to write notes and find them on a calendar by the creation date. Using Firebase for Authentication with Google / Github, and Realtime database.
 
 #### 🎥 Demo
 ![Diary App Gif](https://github.com/Joseph-Enkaoua/Mobile-Applications/blob/main/2%20Diary%20App/Short%20Recording.gif)
@@ -36,9 +36,6 @@ Flutter Apps/
 │-- 3 42 School Info App/
 │-- README.md
 ```
-
-## 📜 License
-This repository is open-source.
 
 ## 🤝 Contributing
 Feel free to fork the repo, submit issues, or open pull requests!
