@@ -8,7 +8,7 @@ Welcome to my Flutter mobile projects repository! 🚀 This repository contains 
 An app to fetch weather anywhere. For current, daily and weekly forecast. Using the device GPS sensor to detect current location.
 
 #### 🎥 Demo
-![Weather App Gif](path_to_video_or_gif_1)
+![Weather App Gif](https://github.com/Joseph-Enkaoua/Mobile-Applications/blob/main/1%20Weather%20App/Short%20Recording.gif)
 
 ---
 
@@ -16,7 +16,7 @@ An app to fetch weather anywhere. For current, daily and weekly forecast. Using 
 An app to write notes and find them on a calendar by the creation date. Using Firebase for AUthentication with Google / Github, and Realtime database.
 
 #### 🎥 Demo
-![Diary App Gif](path_to_video_or_gif_2)
+![Diary App Gif](https://github.com/Joseph-Enkaoua/Mobile-Applications/blob/main/2%20Diary%20App/Short%20Recording.gif)
 
 ---
 
@@ -24,7 +24,7 @@ An app to write notes and find them on a calendar by the creation date. Using Fi
 An app that fetches and displays information about registered 42 students using the 42 API.
 
 #### 🎥 Demo
-![42 Student Info App Gif](path_to_video_or_gif_3)
+![42 Student Info App Gif](https://github.com/Joseph-Enkaoua/Mobile-Applications/blob/main/3%2042%20School%20Info%20App/Short%20Recording.gif)
 
 ---
 
