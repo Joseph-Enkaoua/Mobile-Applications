@@ -67,7 +67,7 @@ class DailyView extends StatelessWidget {
                       child: Text(
                         "Temperatures today",
                         style: TextStyle(
-                            fontSize: width * 0.03 + 10, color: Colors.white),
+                            fontSize: width * 0.03 + 10, color: Colors.blue),
                       ),
                     ),
                     axisNameSize: height * 0.22,

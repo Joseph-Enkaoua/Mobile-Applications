@@ -28,17 +28,14 @@ class WeeklyyView extends StatelessWidget {
   List<FlSpot> buildChartData(bool isMin) {
     List<FlSpot> list = [];
 
-    for (var entry in weeklyWeather) {
-      double? hour = entry['day'];
-      double? temp;
-      if (isMin) {
-        temp = entry['minTemp'];
-      } else {
-        temp = entry['maxTemp'];
-      }
+    for (var entry in weeklyWeather.asMap().entries) {
+      int index = entry.key;
+      var data = entry.value;
 
-      if (hour != null && temp != null && hour.isFinite && temp.isFinite) {
-        list.add(FlSpot(hour, temp));
+      double? temp = isMin ? data['minTemp'] : data['maxTemp'];
+
+      if (temp != null && temp.isFinite) {
+        list.add(FlSpot(index.toDouble(), temp));
       }
     }
 
@@ -121,7 +118,7 @@ class WeeklyyView extends StatelessWidget {
                     child: Text(
                       "Temperatures this week",
                       style: TextStyle(
-                          fontSize: width * 0.03 + 10, color: Colors.white),
+                          fontSize: width * 0.03 + 10, color: Colors.blue),
                     ),
                   ),
                   axisNameSize: height * 0.22,
@@ -177,14 +174,14 @@ class WeeklyyView extends StatelessWidget {
                     show: true,
                     color: Colors.lightBlue.withAlpha(40),
                   ),
-                  spots: buildChartData(true),
+                  spots: buildChartData(false),
                   gradient: LinearGradient(
                     colors: [
-                      Colors.lightBlue,
-                      Colors.lightGreen,
+                      Colors.yellow,
+                      Colors.orangeAccent,
                     ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
                   ),
                   dotData: FlDotData(
                     show: false,
@@ -200,14 +197,14 @@ class WeeklyyView extends StatelessWidget {
                     show: true,
                     color: Colors.lightBlue.withAlpha(40),
                   ),
-                  spots: buildChartData(false),
+                  spots: buildChartData(true),
                   gradient: LinearGradient(
                     colors: [
-                      Colors.orangeAccent,
-                      Colors.deepOrange,
+                      Colors.lightGreen,
+                      Colors.lightBlue,
                     ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
                   dotData: FlDotData(
                     show: false,
