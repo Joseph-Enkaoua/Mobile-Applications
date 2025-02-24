@@ -3,23 +3,32 @@ import 'package:medium_weather_app/element_helper.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class WeeklyyView extends StatelessWidget {
-  const WeeklyyView(
-      {super.key,
-      required this.location,
-      required this.weeklyWeather,
-      required this.errorMessage});
+  const WeeklyyView({
+    super.key,
+    required this.location,
+    required this.weeklyWeather,
+    required this.errorMessage,
+  });
 
   final String errorMessage;
   final Map<String, String> location;
   final List<Map<String, double>> weeklyWeather;
 
   double getMinTemperature() {
+    if (weeklyWeather.isEmpty) {
+      return 0;
+    }
+
     return weeklyWeather
         .map((entry) => entry['minTemp']!)
         .reduce((a, b) => a < b ? a : b);
   }
 
   double getMaxTemperature() {
+    if (weeklyWeather.isEmpty) {
+      return 0;
+    }
+
     return weeklyWeather
         .map((entry) => entry['maxTemp']!)
         .reduce((a, b) => a > b ? a : b);
@@ -45,48 +54,51 @@ class WeeklyyView extends StatelessWidget {
   List<Widget> weeklyForecastList() {
     List<Widget> list = [];
 
-    list.addAll(weeklyWeather.map(
-      (entry) => Row(
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              '${entry['date']}',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 90,
-            child: Text(
-              '${entry['minTemp']}',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 90,
-            child: Text(
-              '${entry['maxTemp']}',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(width: 18),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+    list.addAll(
+      weeklyWeather.map(
+        (entry) => Row(
+          children: [
+            SizedBox(
+              width: 120,
               child: Text(
-                WeatherDescriptionMaps.getWeatherDescription(
-                    "${entry['weathercode']}"),
+                '${entry['date']}',
                 style: TextStyle(fontSize: 18),
-                overflow: TextOverflow.clip,
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 90,
+              child: Text(
+                '${entry['minTemp']}',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              width: 90,
+              child: Text(
+                '${entry['maxTemp']}',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(width: 18),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(
+                  WeatherDescriptionMaps.getWeatherDescription(
+                    "${entry['weathercode']}",
+                  ),
+                  style: TextStyle(fontSize: 18),
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
 
     return list;
   }
@@ -118,7 +130,9 @@ class WeeklyyView extends StatelessWidget {
                     child: Text(
                       "Temperatures this week",
                       style: TextStyle(
-                          fontSize: width * 0.03 + 10, color: Colors.blue),
+                        fontSize: width * 0.03 + 10,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                   axisNameSize: height * 0.22,
@@ -139,7 +153,9 @@ class WeeklyyView extends StatelessWidget {
                         "${value.round()}°c",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.orange, fontSize: width * 0.028),
+                          color: Colors.orange,
+                          fontSize: width * 0.028,
+                        ),
                       );
                     },
                   ),
@@ -148,19 +164,23 @@ class WeeklyyView extends StatelessWidget {
                   axisNameSize: width * 0.1,
                   axisNameWidget: Padding(
                     padding: EdgeInsets.only(
-                        top: 0, bottom: 11, left: width * 0.095),
+                      top: 0,
+                      bottom: 11,
+                      left: width * 0.095,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         for (var entry in weeklyWeather)
-                          getDate(entry['day']!, entry['month']!,
-                              size: width * 0.028),
+                          getDate(
+                            entry['day']!,
+                            entry['month']!,
+                            size: width * 0.028,
+                          ),
                       ],
                     ),
                   ),
-                  sideTitles: SideTitles(
-                    showTitles: false,
-                  ),
+                  sideTitles: SideTitles(showTitles: false),
                 ),
               ),
               lineBarsData: [
@@ -176,16 +196,11 @@ class WeeklyyView extends StatelessWidget {
                   ),
                   spots: buildChartData(false),
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.yellow,
-                      Colors.orangeAccent,
-                    ],
+                    colors: [Colors.yellow, Colors.orangeAccent],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),
-                  dotData: FlDotData(
-                    show: false,
-                  ),
+                  dotData: FlDotData(show: false),
                 ),
                 LineChartBarData(
                   isCurved: true,
@@ -199,16 +214,11 @@ class WeeklyyView extends StatelessWidget {
                   ),
                   spots: buildChartData(true),
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.lightGreen,
-                      Colors.lightBlue,
-                    ],
+                    colors: [Colors.lightGreen, Colors.lightBlue],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
-                  dotData: FlDotData(
-                    show: false,
-                  ),
+                  dotData: FlDotData(show: false),
                 ),
               ],
             ),
@@ -231,64 +241,63 @@ class WeeklyyView extends StatelessWidget {
     } else {
       date += "/${month.toInt()}";
     }
-    return Text(
-      date,
-      style: TextStyle(color: Colors.blueGrey, fontSize: size),
-    );
+    return Text(date, style: TextStyle(color: Colors.blueGrey, fontSize: size));
   }
 
   List<Container> buildCardList(BuildContext c, double h, double w) {
     List<Container> list = [];
 
-    list.addAll(weeklyWeather.map(
-      (entry) => Container(
-        width: h * 0.5,
-        height: w * 0.38,
-        color: Theme.of(c).colorScheme.onPrimary,
-        margin: EdgeInsets.all(0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            getDate(entry['day']!, entry['month']!),
-            WeatherDescriptionMaps(
-              weatherCode: entry['weathercode']!.truncate().toString(),
-              size: 32,
-              color: Colors.lightBlueAccent,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "${entry['maxTemp']!.toInt()}°C",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.orangeAccent, fontSize: 12),
-                ),
-                Text(
-                  " max",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.orangeAccent, fontSize: 12),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "${entry['minTemp']!.toInt()}°C",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.lightGreen, fontSize: 12),
-                ),
-                Text(
-                  " min",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.lightGreen, fontSize: 12),
-                ),
-              ],
-            ),
-          ],
+    list.addAll(
+      weeklyWeather.map(
+        (entry) => Container(
+          width: h * 0.5,
+          height: w * 0.38,
+          color: Theme.of(c).colorScheme.onPrimary,
+          margin: EdgeInsets.all(0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              getDate(entry['day']!, entry['month']!),
+              WeatherDescriptionMaps(
+                weatherCode: entry['weathercode']!.truncate().toString(),
+                size: 32,
+                color: Colors.lightBlueAccent,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${entry['maxTemp']!.toInt()}°C",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.orangeAccent, fontSize: 12),
+                  ),
+                  Text(
+                    " max",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.orangeAccent, fontSize: 12),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${entry['minTemp']!.toInt()}°C",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.lightGreen, fontSize: 12),
+                  ),
+                  Text(
+                    " min",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.lightGreen, fontSize: 12),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
 
     return list;
   }
@@ -311,9 +320,7 @@ class WeeklyyView extends StatelessWidget {
           child: SingleChildScrollView(
             controller: scrollController,
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: buildCardList(context, height, width),
-            ),
+            child: Row(children: buildCardList(context, height, width)),
           ),
         );
       },
@@ -333,12 +340,7 @@ class WeeklyyView extends StatelessWidget {
               color: Theme.of(context).colorScheme.onPrimary,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: getGraph(),
-                  ),
-                  getCardlist(),
-                ],
+                children: [Center(child: getGraph()), getCardlist()],
               ),
             ),
           ),
@@ -346,15 +348,18 @@ class WeeklyyView extends StatelessWidget {
       );
     } else {
       return MessageCard(
-          message: 'Please choose location to show the daily weather at');
+        message: 'Please choose location to show the daily weather at',
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child:
-          Padding(padding: const EdgeInsets.all(12.0), child: getData(context)),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: getData(context),
+      ),
     );
   }
 }

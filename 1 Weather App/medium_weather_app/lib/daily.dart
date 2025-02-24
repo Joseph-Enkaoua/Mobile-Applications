@@ -3,23 +3,32 @@ import 'package:medium_weather_app/element_helper.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DailyView extends StatelessWidget {
-  const DailyView(
-      {super.key,
-      required this.location,
-      required this.dailyWeather,
-      required this.errorMessage});
+  const DailyView({
+    super.key,
+    required this.location,
+    required this.dailyWeather,
+    required this.errorMessage,
+  });
 
   final String errorMessage;
   final Map<String, String> location;
   final List<Map<String, double>> dailyWeather;
 
   double getMinTemperature() {
+    if (dailyWeather.isEmpty) {
+      return 0;
+    }
+
     return dailyWeather
         .map((entry) => entry['temp']!)
         .reduce((a, b) => a < b ? a : b);
   }
 
   double getMaxTemperature() {
+    if (dailyWeather.isEmpty) {
+      return 0;
+    }
+
     return dailyWeather
         .map((entry) => entry['temp']!)
         .reduce((a, b) => a > b ? a : b);
@@ -61,69 +70,83 @@ class DailyView extends StatelessWidget {
               gridData: FlGridData(show: false),
               borderData: FlBorderData(show: false),
               titlesData: FlTitlesData(
-                  topTitles: AxisTitles(
-                    axisNameWidget: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        "Temperatures today",
-                        style: TextStyle(
-                            fontSize: width * 0.03 + 10, color: Colors.blue),
+                topTitles: AxisTitles(
+                  axisNameWidget: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      "Temperatures today",
+                      style: TextStyle(
+                        fontSize: width * 0.03 + 10,
+                        color: Colors.blue,
                       ),
                     ),
-                    axisNameSize: height * 0.22,
                   ),
-                  rightTitles: AxisTitles(),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      interval: getMaxTemperature() - getMinTemperature() > 12
-                          ? 3
-                          : 1,
-                      showTitles: true,
-                      reservedSize: width * 0.095,
-                      getTitlesWidget: (double value, TitleMeta meta) {
-                        if (value > getMaxTemperature() + 0.8 ||
-                            value < getMinTemperature() - 0.9) {
-                          return Container();
-                        }
-                        return Text(
-                          "${value.round()}°c",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.orange, fontSize: width * 0.028),
+                  axisNameSize: height * 0.22,
+                ),
+                rightTitles: AxisTitles(),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    interval:
+                        getMaxTemperature() - getMinTemperature() > 12 ? 3 : 1,
+                    showTitles: true,
+                    reservedSize: width * 0.095,
+                    getTitlesWidget: (double value, TitleMeta meta) {
+                      if (value > getMaxTemperature() + 0.8 ||
+                          value < getMinTemperature() - 0.9) {
+                        return Container();
+                      }
+                      return Text(
+                        "${value.round()}°c",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: width * 0.028,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    reservedSize: width * 0.1,
+                    showTitles: true,
+                    getTitlesWidget: (double value, TitleMeta meta) {
+                      if (value == 23 || value % 5 != 0) {
+                        return Container();
+                      } else if (value < 10) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            top: 4,
+                            bottom: 4,
+                            left: width * 0.095,
+                          ),
+                          child: Text(
+                            "0${value.round()}:00",
+                            style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontSize: width * 0.03,
+                            ),
+                          ),
                         );
-                      },
-                    ),
+                      }
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          top: 4,
+                          bottom: 4,
+                          left: width * 0.095,
+                        ),
+                        child: Text(
+                          "${value.round()}:00",
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: width * 0.03,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                          reservedSize: width * 0.1,
-                          showTitles: true,
-                          getTitlesWidget: (double value, TitleMeta meta) {
-                            if (value == 23 || value % 5 != 0) {
-                              return Container();
-                            } else if (value < 10) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                    top: 4, bottom: 4, left: width * 0.095),
-                                child: Text(
-                                  "0${value.round()}:00",
-                                  style: TextStyle(
-                                      color: Colors.blueGrey,
-                                      fontSize: width * 0.03),
-                                ),
-                              );
-                            }
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top: 4, bottom: 4, left: width * 0.095),
-                              child: Text(
-                                "${value.round()}:00",
-                                style: TextStyle(
-                                    color: Colors.blueGrey,
-                                    fontSize: width * 0.03),
-                              ),
-                            );
-                          }))),
+                ),
+              ),
               lineBarsData: [
                 LineChartBarData(
                   isCurved: true,
@@ -137,17 +160,11 @@ class DailyView extends StatelessWidget {
                   ),
                   spots: buildChartData(),
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.lightGreen,
-                      Colors.yellow,
-                      Colors.orange,
-                    ],
+                    colors: [Colors.lightGreen, Colors.yellow, Colors.orange],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),
-                  dotData: FlDotData(
-                    show: false,
-                  ),
+                  dotData: FlDotData(show: false),
                 ),
               ],
             ),
@@ -173,40 +190,42 @@ class DailyView extends StatelessWidget {
   List<Container> buildCardList(BuildContext c, double h, double w) {
     List<Container> list = [];
 
-    list.addAll(dailyWeather.map(
-      (entry) => Container(
-        width: h * 0.5,
-        height: w * 0.38,
-        color: Theme.of(c).colorScheme.onPrimary,
-        margin: EdgeInsets.all(0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            getHour(entry['hour']!),
-            WeatherDescriptionMaps(
-              weatherCode: entry['weathercode']!.truncate().toString(),
-              size: 32,
-              color: Colors.lightBlueAccent,
-            ),
-            Text(
-              "${entry['temp']}°C",
-              style: TextStyle(color: Theme.of(c).colorScheme.secondary),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.air, size: 12, color: Colors.black54),
-                Text(
-                  "${entry['windspeed']}km/h",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black54, fontSize: 12),
-                ),
-              ],
-            ),
-          ],
+    list.addAll(
+      dailyWeather.map(
+        (entry) => Container(
+          width: h * 0.5,
+          height: w * 0.38,
+          color: Theme.of(c).colorScheme.onPrimary,
+          margin: EdgeInsets.all(0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              getHour(entry['hour']!),
+              WeatherDescriptionMaps(
+                weatherCode: entry['weathercode']!.truncate().toString(),
+                size: 32,
+                color: Colors.lightBlueAccent,
+              ),
+              Text(
+                "${entry['temp']}°C",
+                style: TextStyle(color: Theme.of(c).colorScheme.secondary),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.air, size: 12, color: Colors.black54),
+                  Text(
+                    "${entry['windspeed']}km/h",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
 
     return list;
   }
@@ -229,9 +248,7 @@ class DailyView extends StatelessWidget {
           child: SingleChildScrollView(
             controller: scrollController,
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: buildCardList(context, height, width),
-            ),
+            child: Row(children: buildCardList(context, height, width)),
           ),
         );
       },
@@ -251,12 +268,7 @@ class DailyView extends StatelessWidget {
               color: Theme.of(context).colorScheme.onPrimary,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: getGraph(),
-                  ),
-                  getCardlist(),
-                ],
+                children: [Center(child: getGraph()), getCardlist()],
               ),
             ),
           ),
@@ -264,7 +276,8 @@ class DailyView extends StatelessWidget {
       );
     } else {
       return MessageCard(
-          message: 'Please choose location to show the daily weather at');
+        message: 'Please choose location to show the daily weather at',
+      );
     }
   }
 
